@@ -50,13 +50,13 @@ namespace SPFileZillaCli
             string msg;
 
             BandR.SpComHelper.UploadFileToSharePoint(
-                commands.SiteUrl,
-                commands.SiteUsername,
-                commands.SitePwd,
-                commands.SiteDomain,
+                commands.Target.SiteUrl,
+                commands.Target.SiteUsername,
+                commands.Target.SitePwd,
+                commands.Target.SiteDomain,
                 false,
-                commands.FilePath,
-                commands.FolderUrl,
+                commands.Upload.FilePath,
+                commands.Upload.FolderUrl,
                 true,
                 null, null,
                 out skipped,
@@ -71,26 +71,42 @@ namespace SPFileZillaCli
 
         class Commands
         {
+            public Target Target = new Target();
+            public Upload Upload = new Upload();
+        }
+
+        class Upload
+        {
+            public string FilePath;
+            public string FolderUrl;
+            public bool Overwrite;
+        }
+
+        class Target
+        {
             public string SiteUrl;
             public string SiteUsername;
             public string SitePwd;
             public string SiteDomain;
-            public string FilePath;
-            public string FolderUrl;
-            public bool Overwrite;
         }
 
         private static void Help()
         {
             var commands = new Commands()
             {
-                SiteUrl = "http://sharepoint.acme.com/sandbox/kenny/",
-                SiteUsername = "admin",
-                SitePwd = "Bob Loblaw",
-                SiteDomain = "ACME",
-                FilePath = @"c:\myfiles\myreport.docx",
-                FolderUrl = "Docs",
-                Overwrite = true,
+                Target = new Target
+                { 
+                    SiteUrl = "http://sharepoint.acme.com/sandbox/kenny/",
+                    SiteUsername = "admin",
+                    SitePwd = "Bob Loblaw",
+                    SiteDomain = "ACME"
+                },
+                Upload = new Upload
+                {
+                    FilePath = @"c:\myfiles\myreport.docx",
+                    FolderUrl = "Docs",
+                    Overwrite = true
+                }
             };
             var formatedJson = JsonConvert.SerializeObject(commands);
 
